@@ -72,24 +72,38 @@ class HomeViewModel : HomeViewModelType{
             self.reloadNewsData()
         }
     }
-    
+
     @objc func fetchNews() {
-        
-        getNewsDataobj.getNews(country: UserDefaults.standard.value(forKey: "countryName") as! String, favCategory: "business") { (result) in
-            switch result{
-            case .success(let news):
-                self.localDataBaseObj.addNewsToCoreData(news: news!) { (val) in
-                    if(val){
-                        self.localDataBaseObj.getNewsFromCoreData { (newsData) in
-                            self.dataSubject.onNext(newsData)
-                            self.data = newsData
-                        }
+        let arr = ["business" , "sports" , "general" , "science"]
+        var totalArticle : [Article] = []
+        let dispatchGroup = DispatchGroup()
+        let dispatchQueue = DispatchQueue(label: "Queue", qos: .userInteractive)
+        for item in arr {
+            dispatchGroup.enter()
+            dispatchQueue.async {
+                self.getNewsDataobj.getNews(country: UserDefaults.standard.value(forKey: "countryName") as! String, favCategory: item) { (result) in
+                    switch result{
+                    case .success(let news):
+                        print("get \(item)")
+                        totalArticle.append(contentsOf: news!.articles)
+                        dispatchGroup.leave()
+                    case .failure(_):
+                        print("Error")
+                        self.errorSubject.onNext(true)
+                        dispatchGroup.leave()
                     }
                 }
-            case .failure(_):
-                print("Error")
-                self.errorSubject.onNext(true)
-                
+            }
+        }
+        dispatchGroup.notify(queue: .main) {
+            self.localDataBaseObj.addNewsToCoreData(articles: totalArticle) { (val) in
+                if(val){
+                    self.localDataBaseObj.getNewsFromCoreData { (newsData) in
+                        self.dataSubject.onNext(newsData)
+                        print("get data complete")
+                        self.data = newsData
+                    }
+                }
             }
         }
     }

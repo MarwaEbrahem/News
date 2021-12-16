@@ -42,11 +42,11 @@ extension LocalDataManager {
            completion(allNews)
        }
        
-       func addNewsToCoreData(news : News,completion: @escaping (Bool) -> ()){
+       func addNewsToCoreData(articles : [Article],completion: @escaping (Bool) -> ()){
            var articleInfo = Dictionary<String,Any>()
            var allArticles : Array<Dictionary<String,Any>> = []
         
-           for item in news.articles{
+           for item in articles{
                articleInfo["auther"] = item.author
                articleInfo["description"] = item.articleDescription
                articleInfo["content"] = item.content
