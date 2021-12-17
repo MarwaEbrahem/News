@@ -14,11 +14,9 @@ class HomeViewModel : HomeViewModelType{
    
     var dataDrive: Driver<[Dictionary<String, Any>]>
     var errorObservable: Observable<Bool>
-    var loadingObservable: Observable<Bool>
     var getNewsDataobj = NewsAPI.shared
     var localDataBaseObj = LocalDataManager.sharedInstance
     var dataSubject = PublishSubject<[Dictionary<String, Any>]>()
-    var loadingSubject = PublishSubject<Bool>()
     var errorSubject = PublishSubject<Bool>()
     var searchValue : BehaviorRelay<String> = BehaviorRelay(value: "")
     private lazy var searchValueObservable:Observable<String> = searchValue.asObservable()
@@ -26,7 +24,6 @@ class HomeViewModel : HomeViewModelType{
     private var disposeBag = DisposeBag()
     
     init(){
-        loadingObservable = loadingSubject.asObserver()
         errorObservable = errorSubject.asObserver()
         dataDrive = dataSubject.asDriver(onErrorJustReturn: [])
         searchValueObservable.subscribe(onNext: {[weak self] (value) in
@@ -74,11 +71,16 @@ class HomeViewModel : HomeViewModelType{
     }
 
     @objc func fetchNews() {
-        let arr = ["business" , "sports" , "general" , "science"]
+        if(!Connectivity.isConnectedToInternet){
+            errorSubject.onNext(true)
+                return
+        }
+        let arr = UserDefaults.standard.value(forKey: "favCategories") as? [String]
+        
         var totalArticle : [Article] = []
         let dispatchGroup = DispatchGroup()
         let dispatchQueue = DispatchQueue(label: "Queue", qos: .userInteractive)
-        for item in arr {
+        for item in arr ?? [] {
             dispatchGroup.enter()
             dispatchQueue.async {
                 self.getNewsDataobj.getNews(country: UserDefaults.standard.value(forKey: "countryName") as! String, favCategory: item) { (result) in
@@ -115,7 +117,6 @@ class HomeViewModel : HomeViewModelType{
             userInfo: nil,
             repeats: true)
     }
-    
     
     
 

@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         var vc : UIViewController
-        if(UserDefaults.standard.value(forKey: "countryName") == nil){
+        if(UserDefaults.standard.value(forKey: "countryName") == nil ){
             vc = storyboard.instantiateViewController(withIdentifier: "OnboardingViewController")
           //  DataManager.sharedInstance.createUser()
         }else{

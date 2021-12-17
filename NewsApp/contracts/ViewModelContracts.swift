@@ -12,7 +12,6 @@ import RxCocoa
 
 protocol ViewModelType{
     var errorObservable: Observable<Bool> {get}
-    var loadingObservable: Observable<Bool> {get}
     
 }
 protocol HomeViewModelType : ViewModelType {

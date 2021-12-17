@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (5.4.3)
+  - DropDown (2.3.13)
   - RxCocoa (6.1.0):
     - RxRelay (= 6.1.0)
     - RxSwift (= 6.1.0)
@@ -12,6 +13,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 5.2)
+  - DropDown
   - RxCocoa (= 6.1.0)
   - RxSwift (= 6.1.0)
   - SDWebImage
@@ -19,6 +21,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - DropDown
     - RxCocoa
     - RxRelay
     - RxSwift
@@ -26,11 +29,12 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   RxCocoa: 5c51f02d562cbd94629f6c26cf0c80fe4ab8d343
   RxRelay: 483e1a19fad961b41f0b0c0bee506f46c1ae14fe
   RxSwift: a834e5c538e89eca0cae86f403f4fbf0336786ce
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
-PODFILE CHECKSUM: 275487f6d7dbc8e810ce10064b4a6c353744db18
+PODFILE CHECKSUM: 06c06ac733e0290f0a0a723122412ca867411487
 
 COCOAPODS: 1.10.1

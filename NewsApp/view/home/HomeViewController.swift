@@ -21,7 +21,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         homeViewModelObj = HomeViewModel()
-        searchBar.placeholder = "search for news"
+        searchBar.placeholder = "search by news title"
         let leftNavBarButton = UIBarButtonItem(customView:searchBar)
         self.navigationItem.leftBarButtonItem = leftNavBarButton
         self.newsTableView.delegate = self
@@ -32,11 +32,23 @@ class HomeViewController: UIViewController {
             self.homeNews = newsData
             self.newsTableView.reloadData()
         }).disposed(by: disposeBag)
+        
+        homeViewModelObj?.errorObservable.subscribe(onNext: {[weak self] (boolValue) in
+            guard let self = self else {return}
+            if(boolValue){
+                self.showAlert()
+            }
+        }).disposed(by: disposeBag)
+        
         searchBar.rx.text.orEmpty.debug().distinctUntilChanged().bind(to: homeViewModelObj!.searchValue).disposed(by: disposeBag)
         
         homeViewModelObj?.getNewsData()
     }
-    
+    func showAlert() {
+        let alert = UIAlertController(title: "Alert", message: "Check your internet connection", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 extension HomeViewController: UITableViewDelegate , UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

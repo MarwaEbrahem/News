@@ -12,5 +12,6 @@ target 'NewsApp' do
 
     pod 'RxSwift', '6.1.0'
     pod 'RxCocoa', '6.1.0'
+    pod 'DropDown'
 
 end
